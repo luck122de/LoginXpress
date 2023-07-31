@@ -13,7 +13,7 @@ const userSchema=new mongoose.Schema({
         type:Number,
         require:true
     },
-    wprk:{
+    work:{
         type:String,
         require:true
     },
@@ -30,4 +30,4 @@ const userSchema=new mongoose.Schema({
 
 const User=mongoose.model('USER',userSchema);
 
-module.export=User;
+module.exports=User;
