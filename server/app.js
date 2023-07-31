@@ -5,16 +5,12 @@ const app=express();
 
 dotenv.config({path: './config.env' });
 
-const DB=process.env.DATABASE;
+require("./db/conn");
 
-mongoose.connect(DB,{
-    useNewUrlParser: true,
-    useUnifiedTopology:true
-}).then(()=>{
-    console.log("connection is successful");
-}).catch((e)=>{
-    console.log(`not connected ${e}`);
-})
+// const User=require("./module/userSchema");
+
+const PORT=process.env.PORT;
+
 
 app.get("/",(req,res)=>{
     res.send("u r on home page");
@@ -22,6 +18,6 @@ app.get("/",(req,res)=>{
 
 
 
-app.listen(3000,()=>{
-    console.log("server get connected");
+app.listen(PORT,()=>{
+    console.log(`server get connected ${PORT}`);
 })
