@@ -38,4 +38,27 @@ router.post("/register",async (req,res)=>{
 
 })
 
+router.post("/singin",async (req,res)=>{
+   try{
+      const {email,password}=req.body;
+
+      if(!email, !password){
+         return res.status(400).json({error:"invalid email and password"});
+      }
+       const userlogin=await User.findOne({email:email});
+       
+       console.log(userlogin);
+
+       if(!userlogin){
+         res.status(400).json({message:"user error"});
+       }
+       else{
+       res.json({message:"user singUp successfully"})
+       }
+   }
+   catch(err){
+      console.log(err);
+   }
+})
+
 module.exports= router;
