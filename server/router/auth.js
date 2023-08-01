@@ -10,30 +10,32 @@ router.get("/",(req,res)=>{
    res.send("hi from backend");
 })
 
-router.post("/register",(req,res)=>{
-    //  res.json({message:req.body});
-    const {name,email,phone,work,password,cpassword}=req.body;
+router.post("/register",async (req,res)=>{
+   const {name,email,phone,work,pasword,cpassword}=req.body;
 
-    if(!name||!email|| !phone|| !work|| !password|| !cpassword)
-     return res.status(422).json({error:"Plz filled the field properly"});
+     if(!name,!email,!phone,!work,!pasword,!cpassword){
+      res.status(422).json({error:"filled form completely"});
+     }
+ 
+     try{
+          const userExit=await User.findOne({email:email});
 
-     User.findOne({email:email}).
-     then((userExist)=>{
-        if(userExist){
-        res.status(422).json({error:"email already exit"});
-        }
-     
-     
-     const user=new User({name,email,phone,work,password,cpassword});
+         if(userExit){
+            res.status(422),json({error:"Email already register"});
+         }
 
-     user.save().then(()=>{
-        res.status(201).json({message:"user register succesfully"});
-     }).catch((e)=>{
-        res.status(500).json({error:"failed to register"});
-     })
-    }).catch(err=>{
-        console.log(err); 
-     })
+         const user=new User({name,email,phone,work,pasword,cpassword});
+
+        await user.save();
+
+         res.status(201).json({message:"user successfully register"});
+       
+     }
+     catch(err){
+           console.log(err);
+     }
+
+
 })
 
 module.exports= router;
