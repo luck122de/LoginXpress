@@ -21,7 +21,7 @@ router.post("/register",async (req,res)=>{
           const userExit=await User.findOne({email:email});
 
          if(userExit){
-            res.status(422),json({error:"Email already register"});
+            res.status(422).json({error:"Email already register"});
          }
 
          const user=new User({name,email,phone,work,pasword,cpassword});
