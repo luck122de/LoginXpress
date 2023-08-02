@@ -11,9 +11,9 @@ router.get("/",(req,res)=>{
 })
 
 router.post("/register",async (req,res)=>{
-   const {name,email,phone,work,pasword,cpassword}=req.body;
+   const {name,email,phone,work,password,cpassword}=req.body;
 
-     if(!name,!email,!phone,!work,!pasword,!cpassword){
+     if(!name,!email,!phone,!work,!password,!cpassword){
       res.status(422).json({error:"filled form completely"});
      }
  
@@ -23,12 +23,18 @@ router.post("/register",async (req,res)=>{
          if(userExit){
             res.status(422).json({error:"Email already register"});
          }
+         else if(password != cpassword){
+            res.status(422).json({error:"Email already register"});
+         }
 
-         const user=new User({name,email,phone,work,pasword,cpassword});
+         else{
 
+         const user=new User({name,email,phone,work,password,cpassword});
+//pre bcrypt
         await user.save();
 
          res.status(201).json({message:"user successfully register"});
+         }
        
      }
      catch(err){
