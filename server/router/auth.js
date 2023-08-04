@@ -1,6 +1,8 @@
 const express=require("express");
 const mongoose=require("mongoose");
 const router=express.Router();
+const bcrypt=require("bcryptjs");
+const jwt=require("jsonwebtoken");
 
 require("../db/conn");
 
@@ -46,6 +48,7 @@ router.post("/register",async (req,res)=>{
 
 router.post("/singin",async (req,res)=>{
    try{
+       let token;
       const {email,password}=req.body;
 
       if(!email, !password){
@@ -55,12 +58,34 @@ router.post("/singin",async (req,res)=>{
        
        console.log(userlogin);
 
-       if(!userlogin){
-         res.status(400).json({message:"user error"});
+       if(userlogin){
+
+         const isMatch=await bcrypt.compare(password,userlogin.password);
+
+         token=await userlogin.generateAuthToken();
+        console.log(token);
+
+        res.cookie("jwtoken",token,{
+         expires:new Date(Date.now() + 25892000000),
+         httpOnly:true
+
+        })
+
+               
+         if(!isMatch){
+            
+            res.status(400).json({error:"invalid credential"});
+         }
+         else{
+            
+              res.json({message:"user singin successfully"})
+             }
        }
        else{
-       res.json({message:"user singUp successfully"})
+         
+         res.status(400).json({error:"invalid credential"});
        }
+
    }
    catch(err){
       console.log(err);
